@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self' 'unsafe-eval'">
+    <title>Cyrano</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen"> 
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+   
+<script src="js/jquery-3.6.1.min.js"></script> 
+<script src="js/popper.min.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+
+
+  </head>
+  <body>
+    <h1>Cyrano</h1><br>
+    <div id="barraBotones">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-3">
+         
+             
+              <button id="hazProgramacion">Nueva Programación</button>
+            
+        
+          </div>
+          <div class="col-3">
+            <button id="anyadeInstrumento">Añadir instrumento de evaluación</button>
+          </div>
+          <div class="col-3">
+            <button id="ponerNotas">Poner notas</button>
+          </div>
+          <div class="col-3">
+            <button id="verNotas">Ver notas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="recogeCriterios">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3">
+  Escoja nivel
+
+      <select name="nivel" id="nivel">
+        <option value=""> </option>
+        <option value="1"> 1º ESO</option>
+        <option value="2"> 2º ESO</option>
+        <option value="3"> 3º ESO</option>
+        <option value="4"> 4º ESO</option>
+      </select>
+    </div>
+    <div class="col-6">
+    Escoja materia
+
+      <select name="materia" id="materia">
+        <option value=""></option>
+      </select>
+    </div>
+    <div class="col-3">
+    Escoja evaluación
+
+      <select name="evaluacion" id="evaluacion">
+        <option value=""> </option>
+        <option value="1"> 1ª Evaluación</option>
+        <option value="2"> 2ª Evaluación</option>
+        <option value="3"> Evaluación Final</option>
+        
+      </select>
+    </div>
+  </div>
+
+  <div id="repartoCompetencias">
+<h1>Indique el peso específico de cada competencia (deben sumar 100)</h1>
+<div class="row">
+  <div class="col-3">
+    <table id="competencias" border="1">
+
+    </table>
+  </div>
+</div>
+  </div>
+  <div id="pondCriterios">
+
+  </div>
+  <div id="repartoCriterios">
+  <div class="row">
+    <div class="col-3">
+      <h3>Criterios</h3>
+    </div>
+    <div class="col-3">
+     <h3> 1ª Evaluación</h3>
+    </div>
+    <div class="col-3">
+      <h3> 2ª Evaluación</h3>
+    </div>
+    <div class="col-3">
+      <h3> 3ª Evaluación</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <table id="tablaCriterios" border="1">
+
+      </table>
+    </div>
+    <div class="col-3">
+      <table id="primeraEvaluacion" border="1">
+
+      </table>
+    </div>
+    <div class="col-3">
+      <table id="segundaEvaluacion" border="1">
+
+      </table>
+    </div>
+    <div class="col-3">
+      <table id="evaluacionFinal" border="1">
+
+      </table>   
+    </div>
+    </div>
+  </div>
+  <button id="grabaProgramacion">Grabar Programación</button>
+
+</div>
+
+         
+   
+     
+
+
+
+     
+
+
+  </body>
+  <script src="../js/hazProgramacion.js"></script>
+</html>

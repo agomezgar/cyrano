@@ -1,0 +1,88 @@
+NIVEL;ASIGNATURA;ABREVIATURA
+1;AL2;_1AL2
+1;ALE;_1ALE
+1;Biología y Geología;_1BYG
+1;Educación Física;_1EFI
+1;Francés (2ª Lengua Extranjera);_1FR2
+1;Francés  ;_1FRA
+1;Geografía e Historia;_1GEH
+1;Inglés (2ª Lengua Extranjera);_1IN2
+1;Inglés  ;_1ING
+1;Italiano (2ª Lengua Extranjera;_1IT2
+1;Italiano  ;_1ITA
+1;Lengua Castellana y Literatura;_1LCL
+1;Matemáticas;_1MAT
+1;Música;_1MUS
+1;Proyectos de Artes Plásticas y Visuales;_1PAP
+1;Religión;_1REL
+1;Tecnología y Digitalización;_1TECD
+1;Taller de Emprendimiento y Finanzas Personales;_1TEF
+2;AL2;_2AL2
+2;ALE;_2ALE
+2;Cultura Clásica;_2CLAOP
+2;Desarrollo Digital;_2DESDI
+2;Educación Física;_2EFI
+2;Educación Plástica y Visual;_2EPVA
+2;Educación en Valores;_2EVCE
+2;Francés (2ª Lengua Extranjera);_2FR2
+2;Francés  ;_2FRA
+2;Geografía e Historia;_2GEH
+2;Física y Química;_2FYQ
+2;Inglés (2ª Lengua Extranjera);_2IN2
+2;Inglés  ;_2ING
+2;Italiano (2ª Lengua Extranjera;_2IT2
+2;Italiano  ;_2ITA
+2;Lengua Castellana y Literatura;_2LCL
+2;Matemáticas;_2MAT
+2;Música;_2MUS
+2;Religión;_2REL
+3;Ámbito Científico-Tecnológico;_3ACT
+3;AL2;_3AL2
+3;ALE;_3ALE
+3;Ámbito Socio-Lingüístico;_3ALS
+3;Biología y Geología;_3BYG
+3;Educación Física;_3EFI
+3;Educación Plástica y Visual;_3EPVA
+3;Emprendimiento, Sostenibilidad y Consumo Responsable;_3ESCR
+3;Francés (2ª Lengua Extranjera);_3FR2
+3;Francés  ;_3FRA
+3;Física y Química;_3FYQ
+3;Geografía e Historia;_3GEH
+3;Inglés (2ª Lengua Extranjera);_3IN2
+3;Inglés  ;_3ING
+3;Italiano (2ª Lengua Extranjera;_3IT2
+3;Italiano  ;_3ITA
+3;Lengua Castellana y Literatura;_3LCL
+3;Música Activa, Movimiento y Folclore;_3MAM
+3;Matemáticas;_3MAT
+3;Religión;_3REL
+3;Tecnología y Digitalización;_3TECD
+4;Ámbito Científico-Tecnológico;_4ACT
+4;Artes Escénicas, Danza y Folcklore;_4AED
+4;ALE;_4ALE
+4;Ámbito Socio-Lingüístico;_4ALS
+4;Biología y Geología;_4BYG
+4;Cultura Científica;_4CCI
+4;Cultura Clásica;_4CLAOP
+4;Digitalización;_4DIGIT
+4;EAL2;_4EAL2
+4;Economía y Emprendimiento;_4ECEM
+4;Educación Física;_4EFI
+4;Expresión Artística;_4EXA
+4;Filosofía;_4FIL
+4;Formación y Orientación Personal y Profesional;_4FOP
+4;Francés (2ª Lengua Extranjera);_4FR2
+4;Francés  ;_4FRA
+4;Física y Química;_4FYQ
+4;Geografía e Historia;_4GEH
+4;Inglés (2ª Lengua Extranjera);_4IN2
+4;Inglés  ;_4ING
+4;Italiano (2ª Lengua Extranjera;_4IT2
+4;Latín;_4LAT
+4;Lengua Castellana y Literatura;_4LCL
+4;Matemáticas A;_4MTA
+4;Matemáticas B;_4MTB
+4;Música;_4MUS
+4;Proyectos de Robótica;_4PRO
+4;Religión;_4REL
+4;Tecnología  ;_4TEC

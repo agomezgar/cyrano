@@ -8,7 +8,7 @@ const grabaNotas=document.getElementById("grabaNotas");
 const eligeInstrumento=document.getElementById("eligeInstrumento");
 const eligeGrupo=document.getElementById("eligeGrupo");
 const relacionNotas=document.getElementById("relacionNotas");
-let tablaAlumnos;
+let tablaAlumnos=document.createElement("table");
 let alumnos=[];
 let busqueda;
 grabaNotas.hidden=true;
@@ -54,6 +54,8 @@ window.api.recibir("tomaMaterias",(datos)=>{
     }
 })
 materia.addEventListener('change',function(){
+    nivel.disabled=true;
+
     alumnos=[];
     materiaElegida=materia.options[materia.selectedIndex].value;
     let eleccion={
@@ -68,9 +70,12 @@ window.api.recibir("instrumentosComprobados",()=>{
 
 })
 evaluacion.addEventListener('change',()=>{
+    materia.disabled=true;
+    tablaAlumnos.innerHTML="";
     alumnos=[];
     evaluacionElegida=evaluacion.options[evaluacion.selectedIndex].value;
     relacionNotas.innerHTML="";
+    eligeInstrumento.innerHTML=""
  busqueda={
     "nivelReal":nivel.options[nivel.selectedIndex].value,
     "nivelElegido":nivelElegido,
@@ -81,11 +86,17 @@ eligeInstrumento.disabled=false;
 window.api.enviar("dameInstrumentos",busqueda)
 })
 eligeInstrumento.addEventListener('change',()=>{
+   eligeGrupo.innerHTML="";
+   tablaAlumnos.innerHTML="";
     window.api.enviar("dameGrupos");
     eligeGrupo.disabled=false;
 });
 window.api.recibir("tomaGrupos",(datos)=>{
     relacionNotas.innerHTML=""
+    let el=document.createElement("option");
+    el.value="";
+    el.textContent="";
+    eligeGrupo.appendChild(el);
     for (let i=0;i<datos.length;i++){
         let el=document.createElement("option")
         el.value=datos[i].GRUPO
@@ -94,6 +105,10 @@ window.api.recibir("tomaGrupos",(datos)=>{
     }
 })
 window.api.recibir("tomaInstrumentos",(info)=>{
+    let el=document.createElement("option");
+    el.value="";
+    el.textContent="";
+    eligeInstrumento.appendChild(el);
     for (let i=0;i<info.length;i++){
         let el=document.createElement("option");
         el.value=info[i].instrumento;
@@ -102,6 +117,7 @@ window.api.recibir("tomaInstrumentos",(info)=>{
     }
 })
 eligeGrupo.addEventListener('change',()=>{
+    tablaAlumnos.innerHTML="";
     alumnos=[];
     window.api.enviar("dameAlumnos",eligeGrupo.options[eligeGrupo.selectedIndex].value)
   

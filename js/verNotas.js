@@ -49,6 +49,7 @@ nivel.addEventListener('change',function(){
 window.api.enviar("dameMaterias",nivel.options[nivel.selectedIndex].value)
 })
 window.api.recibir("tomaMaterias",(datos)=>{
+    nivel.disabled=true;
     materia.innerHTML="";
     materia.hidden=false;
     let el0=document.createElement("option");
@@ -64,7 +65,6 @@ window.api.recibir("tomaMaterias",(datos)=>{
 })
 materia.addEventListener('change',function(){
     alumnos=[];
-    instrumentos=[];
     materiaElegida=materia.options[materia.selectedIndex].value;
     notasColocadas=0;
     evaluacion.disabled=false;
@@ -77,6 +77,8 @@ window.api.enviar("compruebaProgramacion",busqueda);
 
 })
 evaluacion.addEventListener('change',()=>{
+    eligeGrupo.innerHTML="";
+    materia.disabled=true;
     alumnos=[];
     evaluacionElegida=evaluacion.options[evaluacion.selectedIndex].value;
     relacionNotas.innerHTML="";
@@ -89,11 +91,15 @@ evaluacion.addEventListener('change',()=>{
 notasColocadas=0;
 eligeGrupo.disabled=false;
 window.api.enviar("dameGrupos");
-window.api.enviar("buscaInstrumentos",busqueda);
+window.api.enviar("buscaInstrumentos2",busqueda);
 })
 
 window.api.recibir("tomaGrupos",(datos)=>{
     notasColocadas=0;
+    let el=document.createElement("option");
+    el.value="";
+    el.textContent="";
+    eligeGrupo.appendChild(el);
     relacionNotas.innerHTML=""
     for (let i=0;i<datos.length;i++){
         let el=document.createElement("option")
@@ -103,9 +109,12 @@ window.api.recibir("tomaGrupos",(datos)=>{
     }
 })
 window.api.recibir("tomaInstrumentos",(datos)=>{
-console.log(datos);
+/*     console.log("Instrumentos sueltos: ")
+console.log(datos); */
+instrumentos=[];
 for (let i=0;i<datos.instrumentos.length;i++){
     if (!instrumentos.includes(datos.instrumentos[i].instrumento)){
+        console.log("Empujando instrumento "+datos.instrumentos[i].instrumento)
     instrumentos.push(datos.instrumentos[i].instrumento)
 }
 }
@@ -254,11 +263,13 @@ window.api.recibir("tomaAlumnos",(alumnosOb)=>{
             "materia":materiaElegida,
             "evaluacion":evaluacionElegida,
             "instrumentos":instrumentos,
+            "evaluacionFinal":false,
             "instrumentosporCompetencia":instrumentosporCompetencia,
             "conjuntoNotas":notasEnviar
         }
         window.api.enviar("generaInformes",info)
     })
+
 //Relleno tabla de notas por alumno e instrumento
 rellenaTablaNombre();
 
@@ -518,5 +529,6 @@ function rellenaTablaComp(){
 
     }
     grabaNotas.hidden=false;
+
 
 }

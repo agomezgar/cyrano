@@ -408,9 +408,14 @@ for (let i=0;i<infoFinal.length;i++){
       //Comprobamos si existe la tabla de programación; si no existe, abortamos
       let tablaComp="prog"+cadena;
       let tablaInst="inst"+cadena;   
-   
-      let promise1=db.dameDatos("SELECT * FROM "+tablaInst+" WHERE evaluacion=="+busqueda.evaluacion+" ORDER BY competencia, id, criterio").then((respuesta)=>{
-console.log("Buscando instrumentos en "+tablaInst)
+   //Cambio id por criterio
+     // let promise1=db.dameDatos("SELECT * FROM "+tablaInst+" WHERE evaluacion=="+busqueda.evaluacion+" ORDER BY competencia, id, criterio").then((respuesta)=>{
+//console.log("Buscando instrumentos en "+tablaInst)
+let sql="";
+   sql="SELECT * FROM "+tablaInst+" WHERE evaluacion=="+busqueda.evaluacion+" ORDER BY competencia, criterio, id"
+
+let promise1=db.dameDatos(sql).then((respuesta)=>{
+
         instrumentos=[];
         if (respuesta.length==0){
           console.log("No hay instrumentos");
@@ -428,6 +433,56 @@ console.log("Buscando instrumentos en "+tablaInst)
             "instrumentos":instrumentos,
             "criterios":respuesta
           }
+  
+        //  console.log("Instrumentos y criterios: ");
+         // console.log(info);
+          win.webContents.send("tomaInstrumentos",info);
+  
+        })
+      })
+    })
+    ipcMain.on("buscaInstrumentos2",function(event,busqueda){
+      let cadena=busqueda.materiaElegida;
+      let cadena2="_"+busqueda.nivelElegido+busqueda.materiaElegida;
+
+          let selectedTable = cadena.replace(/[^a-zA-Z0-9_]/g, '');
+          let selectedTable2 = cadena2.replace(/[^a-zA-Z0-9_]/g, '');
+          console.log(selectedTable);
+      
+      //Comprobamos si existe la tabla de programación; si no existe, abortamos
+      let tablaComp="prog"+cadena;
+      let tablaInst="inst"+cadena;   
+   //Cambio id por criterio
+     // let promise1=db.dameDatos("SELECT * FROM "+tablaInst+" WHERE evaluacion=="+busqueda.evaluacion+" ORDER BY competencia, id, criterio").then((respuesta)=>{
+//console.log("Buscando instrumentos en "+tablaInst)
+let sql="";
+if (busqueda.evaluacion!=3){
+  sql="SELECT * FROM "+tablaInst+" WHERE evaluacion=="+busqueda.evaluacion+" ORDER BY competencia, criterio, id"
+
+}else{
+  sql="SELECT * FROM "+tablaInst+" ORDER BY competencia, criterio, id"
+}
+
+let promise1=db.dameDatos(sql).then((respuesta)=>{
+
+        instrumentos=[];
+        if (respuesta.length==0){
+          console.log("No hay instrumentos");
+          instrumentos=respuesta;
+        }else{
+          instrumentos=respuesta;
+        }
+      }).then(()=>{
+        //console.log("Fallan los criterios...");
+        //console.log("SELECT * FROM "+tablaComp+ " WHERE evaluacion"+busqueda.evaluacion+"==1 ORDER BY competencia,criterio")
+        
+        let promise2=db.dameDatos("SELECT * FROM "+tablaComp+ " WHERE evaluacion"+busqueda.evaluacion+"==1 ORDER BY competencia,criterio").then((respuesta)=>{
+  
+          let info={
+            "instrumentos":instrumentos,
+            "criterios":respuesta
+          }
+  
         //  console.log("Instrumentos y criterios: ");
          // console.log(info);
           win.webContents.send("tomaInstrumentos",info);
@@ -445,14 +500,36 @@ console.log("Buscando instrumentos en "+tablaInst)
       
 
       let tablaInst="inst"+cadena;  
-      for (let i=0;i<info.criterios.length;i++){
-        let sql="INSERT INTO "+tablaInst+" (instrumento,competencia,pesoCompetencia,criterio,pesoCriterio,evaluacion) VALUES "+
-        "('"+info.nombreInstrumento+"','"+info.criterios[i].competencia+"',"+info.criterios[i].pesoCompetencia+",'"+info.criterios[i].criterio
-        +"',"+info.criterios[i].pesoCriterio+","+info.evaluacion+");"
-        console.log(sql);
-        db.graba(sql);
-      }
-      win.loadFile(path.join(__dirname,'html/index.html'))
+      let sql2="SELECT * FROM "+tablaInst+" WHERE instrumento=='"+info.nombreInstrumento+"'";
+      console.log(sql2);
+      let promise=db.dameDatos(sql2).then((nombreI)=>{
+        //console.log(JSON.stringify(nombreI))
+        if (nombreI.length>0){
+          dialog.showMessageBox(win,
+            {
+              type: 'warning',
+              buttons: ['Ok'],
+              title: 'Ya existe ese nombre',
+              cancelId: 99,
+              message:
+                'Ya hay un instrumento de evaluación con ese nombre en esta programación. No se grabará...',
+            }
+        )
+          console.log("Ya hay un instrumento grabado con ese nombre. Cambiar...")
+        }else{
+          console.log("Este instrumento es nuevo, grabamos")
+          for (let i=0;i<info.criterios.length;i++){
+            let sql="INSERT INTO "+tablaInst+" (instrumento,competencia,pesoCompetencia,criterio,pesoCriterio,evaluacion) VALUES "+
+            "('"+info.nombreInstrumento+"','"+info.criterios[i].competencia+"',"+info.criterios[i].pesoCompetencia+",'"+info.criterios[i].criterio
+            +"',"+info.criterios[i].pesoCriterio+","+info.evaluacion+");"
+            console.log(sql);
+            db.graba(sql);
+          }
+          win.loadFile(path.join(__dirname,'html/index.html'))
+        }
+      })
+
+   
 
     })
     ipcMain.on('borraInstrumento',function(event,inst){
@@ -525,10 +602,16 @@ ipcMain.on("dameInstrumentos",function(event,info){
   
 
   let tablaInst="inst"+cadena;  
-  let sql="SELECT DISTINCT instrumento FROM "+tablaInst+" WHERE evaluacion=="+info.evaluacion+' ORDER BY competencia, id';
+  let sql="";
+ 
+    sql="SELECT DISTINCT instrumento FROM "+tablaInst+" WHERE evaluacion=="+info.evaluacion+' ORDER BY competencia, id';
+  
 
   let promise=db.dameDatos(sql).then((respuesta)=>{
-
+if (info.evaluacion==3){
+  console.log("EValuacion final")
+  console.log(JSON.stringify(respuesta));
+}
 win.webContents.send("tomaInstrumentos",respuesta)
   })
 })
@@ -648,7 +731,11 @@ ipcMain.on("dameNotaIndividual",function(event,datos){
   
   //Comprobamos si existe la tabla de programación; si no existe, abortamos
   let tablaNotas="notas"+cadena;
-  let sql="SELECT nota FROM "+tablaNotas+" WHERE instrumento=='"+datos.instrumento+"' AND evaluacion="+datos.evaluacion+" AND alumno="+datos.alumno;
+  //Me preparo la evaluación final
+  let sql;
+ 
+    sql="SELECT nota FROM "+tablaNotas+" WHERE instrumento=='"+datos.instrumento+"' AND alumno="+datos.alumno;
+
   //console.log("Buscando nota individual");
   //console.log(sql)
   let promise=db.dameDatos(sql).then((respuesta)=>{
@@ -679,7 +766,17 @@ ipcMain.on("dameInstrumentosporCompetencia",function(event,datos){
   let tablaInstrumentos="inst"+cadena;
   let instrumento=[];
   for (let i=0;i<datos.totalCompetencias.length;i++){
-    let sql="SELECT * FROM "+tablaInstrumentos+" WHERE competencia=='"+datos.totalCompetencias[i].competencia+"' AND evaluacion="+datos.evaluacion +' ORDER BY competencia';
+
+    //Preparo sql para que también tome la tercera evaluación como la final
+    let sql;
+ if (datos.evaluacion!=3){
+  sql="SELECT * FROM "+tablaInstrumentos+" WHERE competencia=='"+datos.totalCompetencias[i].competencia+"' AND evaluacion="+datos.evaluacion +' ORDER BY competencia';
+
+ }else{
+  sql="SELECT * FROM "+tablaInstrumentos+" WHERE competencia=='"+datos.totalCompetencias[i].competencia+"'  ORDER BY competencia";
+
+ }
+  
     let promise=db.dameDatos(sql).then((respuesta)=>{
       //console.log("Instrumentos para competencia: "+datos.totalCompetencias[i].competencia);
       //console.log(respuesta);
@@ -712,8 +809,12 @@ ipcMain.on("actualizaNota",function(event,datos){
   })
 
 })
+function RoundNum(num, length) { 
+  var number = Math.round(num * Math.pow(10, length)) / Math.pow(10, length);
+  return number;
+}
 ipcMain.on("generaInformes",function(event,datos){
-  console.log(JSON.stringify(datos.notas));
+  //console.log(JSON.stringify(datos.notas));
   let ruta=dialog.showOpenDialog({
     title: '¿Dónde lo guardamos?',
     defaultPath: path.join(__dirname, '/'),
@@ -794,9 +895,9 @@ ipcMain.on("generaInformes",function(event,datos){
                             doc.rect(xNotas,yNotas-5,xNotas2,yNotas2-yNotas+5).lineWidth('1').stroke()
                               doc.fontSize(12)
                               for (let k=0;k<datos.notas.length;k++){
-                                console.log("Y1: "+doc.y)
+                              //  console.log("Y1: "+doc.y)
                                 doc.moveDown();
-                                console.log("Y2: "+doc.y);
+                                //console.log("Y2: "+doc.y);
                                 let xCompetencia=doc.x-10;
                                 let yCompetencia=doc.y-5
                                 doc.font('Times-Bold')
@@ -844,14 +945,14 @@ ipcMain.on("generaInformes",function(event,datos){
                                 let notaCrit={"nota":notaFinalCriterio,"peso":datos.notas[k].pesoCriterios[m]}
                                 notaCompetencia.push(notaCrit);
 
-                                doc.text ("Nota final para criterio "+datos.notas[k].criterios[m]+": "+notaFinalCriterio);
-                                let altoCuadro=0;
-                                if ((doc.y-yCriterios)>0){
+                                doc.text ("Nota final para criterio "+datos.notas[k].criterios[m]+": "+RoundNum(notaFinalCriterio,2));
+                               // let altoCuadro=0;
+               /*                  if ((doc.y-yCriterios)>0){
                                   altoCuadro=doc.y-yCriterios;
                                 }else{
                                   altoCuadro=yCriterios-doc.y;
-                                }
-                                doc.rect(doc.x-10,yCriterios,500,altoCuadro).lineWidth('1').stroke()
+                                } */
+                               // doc.rect(doc.x-10,yCriterios,500,doc.y-yCriterios).lineWidth('1').stroke()
                                 //doc.rect(doc.x-10,yCompetencia,500,doc.y-yCompetencia+5).lineWidth('1').stroke()
 
                             // doc.rect(xCompetencia,yCompetencia,500,doc.y-yCompetencia2).lineWidth('1').stroke()
@@ -867,7 +968,7 @@ ipcMain.on("generaInformes",function(event,datos){
                               let notaCompImp=parseFloat(notaComp/cuenta2)
                              
                               doc.font('Times-Bold');
-                              doc.text("Nota en competencia "+datos.notas[k].competencia+": "+notaCompImp);
+                              doc.text("Nota en competencia "+datos.notas[k].competencia+": "+RoundNum(notaCompImp,2));
                               doc.font('Times-Roman');
                               NotaCompTemporal+=parseFloat(notaCompImp*datos.notas[k].pesoCompetencia);
                               cuentaCompTemporal+=parseFloat(datos.notas[k].pesoCompetencia);
@@ -880,12 +981,14 @@ ipcMain.on("generaInformes",function(event,datos){
                               doc.fontSize(18);
                               let xNotaFinal=doc.x-10;
                               let yNotaFinal=doc.y-5
-                              doc.text("Nota final: "+notaFinal);
+                              doc.text("Nota final: "+RoundNum(notaFinal,2));
                               doc.rect(xNotaFinal,yNotaFinal,500,doc.y-yNotaFinal).lineWidth('1').stroke();
                               doc.end();
                       
 
     }
 
-})
+});
+win.loadFile(path.join(__dirname,'html/index.html'))
+
 })

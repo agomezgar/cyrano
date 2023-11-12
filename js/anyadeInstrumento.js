@@ -33,7 +33,7 @@ verNotas.addEventListener('click',()=>{
     window.api.enviar("cargaVerNotas");
 })
 nivel.addEventListener('change',function(){
-    console.log(nivel.options[nivel.selectedIndex].value);
+    //console.log(nivel.options[nivel.selectedIndex].value);
      nivelElegido=nivel.options[nivel.selectedIndex].value;
     if (nivelElegido==1||nivelElegido==2||nivelElegido==3){
         nivelElegido=0;
@@ -60,6 +60,7 @@ window.api.recibir("tomaMaterias",(datos)=>{
     }
 })
 materia.addEventListener('change',function(){
+    nivel.disabled=true;
     materiaElegida=materia.options[materia.selectedIndex].value;
     let eleccion={
         "nivelElegido": nivelElegido,
@@ -72,8 +73,12 @@ window.api.recibir("instrumentosComprobados",()=>{
     evaluacion.disabled=false;
 })
 evaluacion.addEventListener('change',()=>{
+    materia.disabled=true;
     evaluacionElegida=evaluacion.options[evaluacion.selectedIndex].value;
     criteriosDisponibles.innerHTML="";
+    instrumentosRecogidos.innerHTML="";
+    critDisp=[];
+    tablaInst.innerHTML="";
 let busqueda={
     "nivelReal":nivel.options[nivel.selectedIndex].value,
     "nivelElegido":nivelElegido,
@@ -88,7 +93,7 @@ critDisp=respuesta.criterios;
 critEl=[]
 if (respuesta.instrumentos.length==0){
     console.log("Vacío");
-    instrumentosRecogidos.innerHTML="No hay instrumentos, macho"
+    instrumentosRecogidos.innerHTML="No hay instrumentos grabados para esta evaluación."
 }else{
     let preparado=[];
 for (let i=0;i<respuesta.instrumentos.length;i++){

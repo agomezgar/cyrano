@@ -1,0 +1,100 @@
+{
+  "name": "cyrano",
+  "version": "1.0.0",
+  "description": "Cuaderno de evaluación generado en el IES Maestro Juan de Ávila",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds",
+    "dist": "electron-builder",
+    "dist2": "electron-packager . actasEvaluacion --platform=win32 --arch=x64 --out=dist2",
+    "compiler": "electron-builder build --win --x64",
+    "build:linux": "electron-builder -l",
+    "build:win": "electron-builder -w",
+    "dist3": "electron-builder --win=portable"
+  },
+  "build": {
+    "appId": "cyrano",
+    "asar": false,
+    "files": [
+      "**/*",
+      "app/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "./dataBase/",
+        "to": "app/dataBase/",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "./js/",
+        "to": "app/js/",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "./html/",
+        "to": "app/html/",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "./images/",
+        "to": "app/images/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    }
+  },
+  "author": "Antonio Gómez García <antonio@aprendizdetecnologo.es>",
+  "homepage": "http://aprendizdetecnologo.es",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^21.3.3",
+    "electron-builder": "^23.6.0",
+    "electron-packager": "^17.1.1",
+    "electron-rebuild": "^3.2.9",
+    "sqlite3": "^5.1.2"
+  },
+  "dependencies": {
+    "build": "^0.1.4",
+    "csv-parse": "^5.5.2",
+    "fs-extra": "^11.1.0",
+    "pdfkit": "^0.13.0",
+    "sqlite3": "^5.1.2"
+  }
+}
